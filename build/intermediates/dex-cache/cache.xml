@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="E:\workspace\BTLETest\BleArduino\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="E:\workspace\BTLETest\BleArduino\app\build\intermediates\pre-dexed\debug\classes-235d4c6892dc1a1c705b9f712d707c32ce31b4de.jar" />
+    </item>
+    <item
+        jar="E:\workspace\BTLETest\BleArduino\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\libs\internal_impl-23.0.1.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
+        <dex dex="E:\workspace\BTLETest\BleArduino\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.1-4950d8da49391b9a1c34c13bd3b1d70c1f05524b.jar" />
+    </item>
+    <item
+        jar="E:\workspace\BTLETest\BleArduino\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="E:\workspace\BTLETest\BleArduino\app\build\intermediates\pre-dexed\debug\classes-5bfc6d5711d3fe1523e00700a5f124a2ee6852af.jar" />
+    </item>
+    <item
+        jar="C:\Program Files (x86)\Android\android-sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.1\support-annotations-23.0.1.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
+        <dex dex="E:\workspace\BTLETest\BleArduino\app\build\intermediates\pre-dexed\debug\support-annotations-23.0.1-624f6853fcf9ff6d647c0ddab0f64c982433398a.jar" />
+    </item>
+
+</items>
