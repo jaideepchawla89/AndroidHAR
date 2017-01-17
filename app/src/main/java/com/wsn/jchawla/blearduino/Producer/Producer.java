@@ -5,7 +5,7 @@ package com.wsn.jchawla.blearduino.Producer;
  */
 
 public interface Producer {
-    public void   start();
+    public void   initialize();
     public String Produce();
     public void stop();
 }

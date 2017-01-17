@@ -1,0 +1,167 @@
+CURRENT STATS:
+System memory usage:
+  SOff/Norm: 1 samples:
+    Cached: 300MB min, 300MB avg, 300MB max
+    Free: 116MB min, 116MB avg, 116MB max
+    ZRam: 0.00 min, 0.00 avg, 0.00 max
+    Kernel: 197MB min, 197MB avg, 197MB max
+    Native: 98MB min, 98MB avg, 98MB max
+
+Per-Package Stats:
+  * com.wsn.jchawla.blearduino / u0a5 / v1:
+      * com.wsn.jchawla.blearduino / u0a5 / v1:
+               TOTAL: 11% (57MB-60MB-63MB/55MB-58MB-60MB over 7)
+                 Top: 11% (57MB-60MB-63MB/55MB-58MB-60MB over 7)
+            (Cached): 0.06%
+      * com.wsn.jchawla.blearduino.Main.SensorService:
+        Process: com.wsn.jchawla.blearduino
+            Running count 12 / time 2.5%
+            Started count 7 / time 2.5%
+          Executing count 12 / time 0.01%
+
+Summary:
+  * com.wsn.jchawla.blearduino / u0a5 / v1:
+           TOTAL: 11% (57MB-60MB-63MB/55MB-58MB-60MB over 7)
+             Top: 11% (57MB-60MB-63MB/55MB-58MB-60MB over 7)
+        (Cached): 0.06%
+
+Run time Stats:
+  SOff/Norm: +49s942ms
+  SOn /Norm: +1h38m55s364ms (running)
+      TOTAL: +1h39m45s306ms
+
+Memory usage:
+  Kernel : 197MB (8 samples)
+  Native : 98MB (8 samples)
+  Persist: 236MB (48 samples)
+  Top    : 86MB (101 samples)
+  ImpFg  : 296MB (240 samples)
+  ImpBg  : 59MB (111 samples)
+  Service: 0.96GB (397 samples)
+  Receivr: 91KB (173 samples)
+  Home   : 7.3MB (6 samples)
+  LastAct: 2.3MB (52 samples)
+  CchAct : 199MB (31 samples)
+  CchCAct: 89MB (4 samples)
+  CchEmty: 161MB (189 samples)
+  Cached : 300MB (8 samples)
+  Free   : 116MB (8 samples)
+  TOTAL  : 2.8GB
+  ServRst: 75KB (21 samples)
+
+          Start time: 2017-01-17 18:47:40
+  Total elapsed time: +1h39m45s315ms (partial) libart.so
+
+AGGREGATED OVER LAST 24 HOURS:
+System memory usage:
+  SOff/Norm: 13 samples:
+    Cached: 83MB min, 240MB avg, 463MB max
+    Free: 98MB min, 137MB avg, 217MB max
+    ZRam: 0.00 min, 0.00 avg, 0.00 max
+    Kernel: 181MB min, 193MB avg, 213MB max
+    Native: 98MB min, 101MB avg, 103MB max
+  SOn /Norm: 7 samples:
+    Cached: 218MB min, 315MB avg, 436MB max
+    Free: 104MB min, 115MB avg, 152MB max
+    ZRam: 0.00 min, 0.00 avg, 0.00 max
+    Kernel: 184MB min, 191MB avg, 199MB max
+    Native: 100MB min, 101MB avg, 102MB max
+
+Per-Package Stats:
+  * com.wsn.jchawla.blearduino / u0a5 / v1:
+      * com.wsn.jchawla.blearduino / u0a5 / v1:
+               TOTAL: 2.1% (57MB-60MB-63MB/55MB-58MB-60MB over 7)
+                 Top: 2.1% (57MB-60MB-63MB/55MB-58MB-60MB over 7)
+            (Cached): 0.01%
+      * com.wsn.jchawla.blearduino.Main.SensorService:
+        Process: com.wsn.jchawla.blearduino
+            Running count 12 / time 0.48%
+            Started count 7 / time 0.48%
+          Executing count 12 / time 0.00%
+
+Summary:
+  * com.wsn.jchawla.blearduino / u0a5 / v1:
+           TOTAL: 2.1% (57MB-60MB-63MB/55MB-58MB-60MB over 7)
+             Top: 2.1% (57MB-60MB-63MB/55MB-58MB-60MB over 7)
+        (Cached): 0.01%
+
+Run time Stats:
+  SOff/Norm: +3h2m42s139ms
+  SOn /Norm: +5h37m29s920ms
+      TOTAL: +8h40m12s59ms
+
+Memory usage:
+  Kernel : 192MB (140 samples)
+  Native : 101MB (140 samples)
+  Persist: 233MB (353 samples)
+  Top    : 157MB (1770 samples)
+  ImpFg  : 272MB (2247 samples)
+  ImpBg  : 75MB (1748 samples)
+  Service: 0.91GB (3842 samples)
+  Receivr: 118KB (2049 samples)
+  Home   : 20MB (48 samples)
+  LastAct: 7.1MB (726 samples)
+  CchAct : 146MB (233 samples)
+  CchCAct: 47MB (54 samples)
+  CchEmty: 192MB (1190 samples)
+  Cached : 288MB (140 samples)
+  Free   : 122MB (140 samples)
+  TOTAL  : 2.7GB
+  ServRst: 4.6KB (244 samples)
+
+          Start time: 2017-01-16 19:13:59
+  Total elapsed time: +1d1h13m31s338ms (partial) libart.so
+
+AGGREGATED OVER LAST 3 HOURS:
+System memory usage:
+  SOff/Norm: 1 samples:
+    Cached: 300MB min, 300MB avg, 300MB max
+    Free: 116MB min, 116MB avg, 116MB max
+    ZRam: 0.00 min, 0.00 avg, 0.00 max
+    Kernel: 197MB min, 197MB avg, 197MB max
+    Native: 98MB min, 98MB avg, 98MB max
+
+Per-Package Stats:
+  * com.wsn.jchawla.blearduino / u0a5 / v1:
+      * com.wsn.jchawla.blearduino / u0a5 / v1:
+               TOTAL: 11% (57MB-60MB-63MB/55MB-58MB-60MB over 7)
+                 Top: 11% (57MB-60MB-63MB/55MB-58MB-60MB over 7)
+            (Cached): 0.06%
+      * com.wsn.jchawla.blearduino.Main.SensorService:
+        Process: com.wsn.jchawla.blearduino
+            Running count 12 / time 2.5%
+            Started count 7 / time 2.5%
+          Executing count 12 / time 0.01%
+
+Summary:
+  * com.wsn.jchawla.blearduino / u0a5 / v1:
+           TOTAL: 11% (57MB-60MB-63MB/55MB-58MB-60MB over 7)
+             Top: 11% (57MB-60MB-63MB/55MB-58MB-60MB over 7)
+        (Cached): 0.06%
+
+Run time Stats:
+  SOff/Norm: +49s942ms
+  SOn /Norm: +1h38m55s460ms
+      TOTAL: +1h39m45s402ms
+
+Memory usage:
+  Kernel : 197MB (8 samples)
+  Native : 98MB (8 samples)
+  Persist: 236MB (48 samples)
+  Top    : 86MB (101 samples)
+  ImpFg  : 296MB (240 samples)
+  ImpBg  : 59MB (111 samples)
+  Service: 0.96GB (397 samples)
+  Receivr: 91KB (173 samples)
+  Home   : 7.3MB (6 samples)
+  LastAct: 2.3MB (52 samples)
+  CchAct : 199MB (31 samples)
+  CchCAct: 89MB (4 samples)
+  CchEmty: 161MB (189 samples)
+  Cached : 300MB (8 samples)
+  Free   : 116MB (8 samples)
+  TOTAL  : 2.8GB
+  ServRst: 75KB (21 samples)
+
+          Start time: 2017-01-17 18:47:40
+  Total elapsed time: +1h39m45s402ms (partial) libart.so

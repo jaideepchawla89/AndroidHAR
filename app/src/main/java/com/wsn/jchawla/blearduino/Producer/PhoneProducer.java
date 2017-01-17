@@ -183,7 +183,7 @@ public class PhoneProducer implements SensorEventListener,Runnable {
 
 
         //   writeToFile(formatted);
-
+         Log.d("in phone",formatted);
         return formatted;
 
     }

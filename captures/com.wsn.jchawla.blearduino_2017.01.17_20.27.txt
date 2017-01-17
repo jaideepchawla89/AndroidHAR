@@ -1,0 +1,2 @@
+Bad activity command, or no activities match: com.wsn.jchawla.blearduino
+Use -h for help.

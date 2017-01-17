@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         activityName = (EditText) findViewById(R.id.activityName);
 
 
-        Intent serviceIntent = new Intent(this, TestReceiver.class);
+        Intent serviceIntent = new Intent(this, SensorService.class);
         serviceIntent.putExtra("personName",pName.getText().toString());
         serviceIntent.putExtra("activityName",activityName.getText().toString());
 

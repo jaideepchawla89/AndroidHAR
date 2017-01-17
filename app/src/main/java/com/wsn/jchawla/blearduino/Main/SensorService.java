@@ -79,7 +79,7 @@ public class SensorService extends Service {
                 .build();
 
 
-        startForeground(AppConstants.NOTIFICATION_ID.FOREGROUND_SERVICE, notification);
+        startForeground(AppConstants.NOTIFICATION_ID.FOREGROUND_SERVICE, notification); //possibly need to fix this
 
         p= new PhoneProducer(this,sensorData,pName,activityName);
         // b= new BluetoothProducer(this,sensorData,pName,activityName);
@@ -124,7 +124,7 @@ public class SensorService extends Service {
     public void onStop(){
         //  b.stopBluetooth();
 
-        p.cleanThread();
+       // p.cleanThread();
 
 
         //   c.finishConsumption();
@@ -138,7 +138,7 @@ public class SensorService extends Service {
 
         // b.stopBluetooth();
 
-        p.cleanThread();
+      //  p.cleanThread();
 
         //   c.finishConsumption();
     }

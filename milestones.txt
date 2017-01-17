@@ -1,0 +1,9 @@
+application todo and documentation
+
+1) analyse orientation after increasing interval and see if orientation filter works
+2)make notification and startForeground() work. application possibly not working because of start foreground error
+3) acquire wakelock properly
+4) Memory usage over time , read about android studio device monitor and look for possible plugins that give additional data
+5)Work on network connectivity: Maybe test it out on thingsspeak.com
+6) read about handling redundancy in files
+7) Three tier architecture: If phone not connected store on device. If phone not connected to server store on phone else   
