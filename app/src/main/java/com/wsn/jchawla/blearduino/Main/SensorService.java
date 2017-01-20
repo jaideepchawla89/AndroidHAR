@@ -15,8 +15,12 @@ import android.provider.SyncStateContract;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.wsn.jchawla.blearduino.ConsumerImplementation.ItemProcessor;
+import com.wsn.jchawla.blearduino.ConsumerImplementation.Consumer;
+import com.wsn.jchawla.blearduino.ConsumerImplementation.ConsumerImpl;
+
+import com.wsn.jchawla.blearduino.Producer.AnotherPhoneProducer;
 import com.wsn.jchawla.blearduino.Producer.PhoneProducer;
+import com.wsn.jchawla.blearduino.Producer.Producer;
 import com.wsn.jchawla.blearduino.R;
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -37,8 +41,8 @@ public class SensorService extends Service {
     LinkedBlockingQueue<String> sensorData=new LinkedBlockingQueue<>();
 
 
-    PhoneProducer phoneProducer  ;
-    ItemProcessor itemProcessor;
+    Producer phoneProducer  ;
+    Consumer consumer = new ConsumerImpl(10);
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -86,11 +90,11 @@ public class SensorService extends Service {
 
        // p= new PhoneProducer(this,sensorData,pName,activityName);
         // b= new BluetoothProducer(this,sensorData,pName,activityName);
-        phoneProducer= new PhoneProducer(this,sensorData,"hard","code");
-        itemProcessor = new ItemProcessor(sensorData);
+        phoneProducer= new AnotherPhoneProducer(this,"hard","code");
+        Consumer consumer = new ConsumerImpl(10);
+        consumer.consume(phoneProducer.startProducing());
+        //consumer.consume(new Thread(phoneProducer).start());
 
-        new Thread(phoneProducer).start();
-        new Thread (itemProcessor).start();
         Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
         Log.d("service", "service onstartcommand");
 
@@ -115,10 +119,10 @@ public class SensorService extends Service {
                     Log.i(TAG, "Runnable executing.");
                     //unregisterListener(); possibly reregister all threads
                     //registerListener();
-                    phoneProducer.cleanThread();
+                    phoneProducer.stopProducing();
                     //new Thread(p).start();
                     // This might lead to creation of many threads and needs to be checked
-                    new Thread(phoneProducer).start();
+                    phoneProducer.startProducing();
 
                 }
             };
@@ -130,12 +134,8 @@ public class SensorService extends Service {
 
 
     public void onStop(){
-        //  b.stopBluetooth();
-
-       // p.cleanThread();
 
 
-        //   c.finishConsumption();
 
 
     }
@@ -144,11 +144,7 @@ public class SensorService extends Service {
 
     public void onPause(){
 
-        // b.stopBluetooth();
 
-      //  p.cleanThread();
-
-        //   c.finishConsumption();
     }
 
 
@@ -159,8 +155,8 @@ public class SensorService extends Service {
 
         // b.stopBluetooth();
         unregisterReceiver(mReceiver);
-        phoneProducer.cleanThread();
-        itemProcessor.cancelExecution();
+        phoneProducer.stopProducing();
+
 
         mWakeLock.release();
         stopForeground(true);

@@ -5,6 +5,8 @@ package com.wsn.jchawla.blearduino.ConsumerImplementation;
  * This is the actually purported Implementation of a consumer
  * still need to fix the ItemProcessor to send data to a file or something
  */
+import com.wsn.jchawla.blearduino.Item.Item;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -14,8 +16,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class ConsumerImpl implements Consumer
 {
-    private BlockingQueue< String > itemQueue =
-            new LinkedBlockingQueue< String >();
+    private BlockingQueue<Item> itemQueue =
+            new LinkedBlockingQueue< Item >();
 
     private ExecutorService executorService =
             Executors.newCachedThreadPool();
@@ -25,9 +27,9 @@ public class ConsumerImpl implements Consumer
 
     private volatile boolean shutdownCalled = false;
 
-    public ConsumerImpl(int poolSize,LinkedBlockingQueue buf)
+    public ConsumerImpl(int poolSize)
     {
-        itemQueue =buf;
+        //itemQueue =buf;
 
         for(int i = 0; i < poolSize; i++)
         {
@@ -39,7 +41,7 @@ public class ConsumerImpl implements Consumer
         }
     }
 
-    public boolean consume(String j)
+    public boolean consume(Item j)
     {
         if(!shutdownCalled)
         {
@@ -59,6 +61,8 @@ public class ConsumerImpl implements Consumer
             return false;
         }
     }
+
+
 
     public void finishConsumption()
     {

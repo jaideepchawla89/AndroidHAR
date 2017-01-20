@@ -5,19 +5,22 @@ package com.wsn.jchawla.blearduino.ConsumerImplementation;
  */
 import android.util.Log;
 
+import com.wsn.jchawla.blearduino.Item.Item;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class ItemProcessor implements Runnable
 {
-    private BlockingQueue< String> jobQueue;
+    private BlockingQueue<Item> jobQueue;
 
     private volatile boolean keepProcessing;
 
-    public ItemProcessor(BlockingQueue< String > queue)
+    public ItemProcessor(BlockingQueue< Item > queue)
     {
         jobQueue = queue;
         keepProcessing = true;
+        Log.d("Itemproce","gets created");
     }
 
     public void run()
@@ -26,11 +29,11 @@ public class ItemProcessor implements Runnable
         {
             try
             {
-                String j = jobQueue.poll(10, TimeUnit.SECONDS);
+                Item j = jobQueue.poll(10, TimeUnit.SECONDS);
 
                 if(j != null)
                 {
-                    Log.d("output",j);   //put J in a file here most probably
+                    Log.d("output from",j.process());   //call j.process which is the process function implemented by the item class
                 }
             }
             catch(InterruptedException ie)
@@ -44,5 +47,6 @@ public class ItemProcessor implements Runnable
     public void cancelExecution()
     {
         this.keepProcessing = false;
+        Log.d("Itemproc","Gets destroyed");
     }
 }

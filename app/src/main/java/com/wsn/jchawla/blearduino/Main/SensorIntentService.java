@@ -34,7 +34,7 @@ public class SensorIntentService extends IntentService {
         String pName = intent.getStringExtra("personName");
         String activityName = intent.getStringExtra("activityName");
 
-        p= new PhoneProducer(this,sensorData,pName,activityName);
+       // p= new PhoneProducer(this,sensorData,pName,activityName);
         // b= new BluetoothProducer(this,sensorData,pName,activityName);
 
 

@@ -5,4 +5,5 @@ package com.wsn.jchawla.blearduino.connectivity;
  */
 
 public interface ConnectionInterface {
+    public void send(String send);
 }

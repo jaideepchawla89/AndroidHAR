@@ -12,6 +12,8 @@ import android.hardware.SensorManager;
 import android.os.Environment;
 import android.util.Log;
 
+import com.wsn.jchawla.blearduino.Item.Item;
+import com.wsn.jchawla.blearduino.Item.SensorReading;
 import com.wsn.jchawla.blearduino.Main.AppConstants;
 
 import java.io.File;
@@ -31,8 +33,9 @@ public class PhoneProducer implements SensorEventListener,Runnable {
     private Sensor accSensor=null;
     private Sensor gyroSensor=null;
     private Sensor magSensor=null;
-    private LinkedBlockingQueue<String> buffer=new LinkedBlockingQueue<>();
+   // private LinkedBlockingQueue<String> buffer=new LinkedBlockingQueue<>();
     private Context mContext;
+    Item item ;
 
     public static File mLogFile = null;
     public static FileOutputStream mFileStream = null;
@@ -64,6 +67,8 @@ public class PhoneProducer implements SensorEventListener,Runnable {
 
     private float[] selectedOrientation = fusedOrientation;
 
+
+
     public enum Mode {
         ACC_MAG, GYRO, FUSION
     }
@@ -87,16 +92,16 @@ public class PhoneProducer implements SensorEventListener,Runnable {
 
 
 
-    public PhoneProducer(Context context, LinkedBlockingQueue buf, String name, String aName)
+    public PhoneProducer(Context context,  String name, String aName)
     {
         mContext =context;
-        this.buffer = buf;
+        //this.buffer = buf;
 
         gyroOrientation[0] = 0.0f;
         gyroOrientation[1] = 0.0f;
         gyroOrientation[2] = 0.0f;
 
-        setupFolderAndFile(); //set up folder and file
+        //setupFolderAndFile(); //set up folder and file
 
         // initialise gyroMatrix with identity matrix
         gyroMatrix[0] = 1.0f;
@@ -114,7 +119,12 @@ public class PhoneProducer implements SensorEventListener,Runnable {
         // fuseTimer.scheduleAtFixedRate(new calculateFusedOrientationTask(), 1000, TIME_CONSTANT);
         pName=name;
         activityname=aName;
+        Log.d("service", mContext.toString());
+        mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
 
+        accSensor =mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        gyroSensor =mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        magSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
     }
 
 
@@ -122,12 +132,7 @@ public class PhoneProducer implements SensorEventListener,Runnable {
     @Override
     public void run() {
         //handler.sendMessage();
-        Log.d("service", mContext.toString());
-        mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
 
-        accSensor =mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        gyroSensor =mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        magSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
         mSensorManager.registerListener(this, accSensor,200000 ,200000);
         mSensorManager.registerListener(this,gyroSensor,200000 ,200000);
@@ -140,7 +145,7 @@ public class PhoneProducer implements SensorEventListener,Runnable {
 
     }
 
-    private String getAccelerometer(SensorEvent event)  {
+    private Item getAccelerometer(SensorEvent event)  {
 
         // Log.d("in thread", "getAccel");
 
@@ -164,11 +169,13 @@ public class PhoneProducer implements SensorEventListener,Runnable {
         double azimuthValue = getAzimuth();
         double rollValue =  getRoll();
         double pitchValue =  getPitch();
+        item=new SensorReading(event.timestamp/1000,azimuthValue,rollValue,pitchValue,Double.valueOf(accel[0]),Double.valueOf(accel[1]),Double.valueOf(accel[2])) ;
+
 
         //  Log.d("azimuth",Double.toString(azimuthValue));
         //  Log.d("roll",Double.toString(rollValue));
         //  Log.d("pitch", Double.toString(pitchValue));
-        String formatted = String.valueOf(System.currentTimeMillis()/1000)
+     /*   String formatted = String.valueOf(System.currentTimeMillis()/1000)
                 // + "," + String.valueOf(event.timestamp/1000)
                 +"," + pName
                 +","+ activityname
@@ -181,11 +188,16 @@ public class PhoneProducer implements SensorEventListener,Runnable {
                 + "," + "p";
 
 
-
+        try {
+            buffer.put(formatted);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //   writeToFile(formatted);
-         Log.d("in phone",formatted);
-        return formatted;
+        // Log.d("in phone",formatted);
+        return formatted;*/
 
+    return item;
     }
 
     @Override
@@ -209,73 +221,16 @@ public class PhoneProducer implements SensorEventListener,Runnable {
             Log.d("in thread", "cleanThread");
         }
         fuseTimer.cancel();
-        shutdownLogger();
-    }
-
-
-    private void setupFolderAndFile() {
-
-        File folder = new File(Environment.getExternalStorageDirectory()
-                + File.separator + AppConstants.APP_LOG_FOLDER_NAME);
-
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-
-        mLogFile = new File(Environment.getExternalStorageDirectory().toString()
-                + File.separator + AppConstants.APP_LOG_FOLDER_NAME
-                + File.separator + "testphone.txt");
-
-        if (!mLogFile.exists()) {
-            try {
-                mLogFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (mFileStream == null) {
-            try {
-                mFileStream = new FileOutputStream(mLogFile, true);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
+        //shutdownLogger();
     }
 
 
 
 
-    private void writeToFile(String formatted)
-    {
 
-        if (mFileStream != null && mLogFile.exists()) {
 
-            try {
-                mFileStream.write(formatted.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
 
-    }
 
-    private void shutdownLogger() {
-        //Flush and close file stream
-        if (mFileStream != null) {
-            try {
-                mFileStream.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                mFileStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
 
 
 

@@ -7,7 +7,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="b8453b5a7678e4141ae09a734eda11addb7e54e3">
+        sha1="4a8a3c7c19e2ef566d22ebc8c3e038de007deb60">
         <dex dex="E:\workspace\BTLETest\BleArduino\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_06f0fdc5a1696c27c92dd927a21a54854ab34f56\classes.dex" />
     </item>
     <item
@@ -115,7 +115,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="4953a4d11aa63126bfd052975b8b5333683c439d">
+        sha1="4b0c5c34d56885236ca091a4790ca34e4f338117">
         <dex dex="E:\workspace\BTLETest\BleArduino\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_385e0e2abaad8d388bb0f2948e99f10b62c9d20e\classes.dex" />
     </item>
     <item
