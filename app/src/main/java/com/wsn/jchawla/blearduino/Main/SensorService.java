@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.hardware.SensorEvent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -14,6 +15,7 @@ import android.provider.SyncStateContract;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.wsn.jchawla.blearduino.ConsumerImplementation.ItemProcessor;
 import com.wsn.jchawla.blearduino.Producer.PhoneProducer;
 import com.wsn.jchawla.blearduino.R;
 
@@ -35,7 +37,8 @@ public class SensorService extends Service {
     LinkedBlockingQueue<String> sensorData=new LinkedBlockingQueue<>();
 
 
-    PhoneProducer p  ;
+    PhoneProducer phoneProducer  ;
+    ItemProcessor itemProcessor;
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -71,8 +74,8 @@ public class SensorService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId){
 
 
-        String pName = intent.getStringExtra("personName");
-        String activityName = intent.getStringExtra("activityName");
+       // String pName = intent.getStringExtra("personName");
+        //String activityName = intent.getStringExtra("activityName");
         Notification notification = new Notification.Builder(this)
                 .setContentTitle(AppConstants.ACTIVITY.NOTIFICATION_TITLE)
                 .setContentText(AppConstants.ACTIVITY.NOTIFICATION_MESSAGE)
@@ -81,11 +84,13 @@ public class SensorService extends Service {
 
         startForeground(AppConstants.NOTIFICATION_ID.FOREGROUND_SERVICE, notification); //possibly need to fix this
 
-        p= new PhoneProducer(this,sensorData,pName,activityName);
+       // p= new PhoneProducer(this,sensorData,pName,activityName);
         // b= new BluetoothProducer(this,sensorData,pName,activityName);
+        phoneProducer= new PhoneProducer(this,sensorData,"hard","code");
+        itemProcessor = new ItemProcessor(sensorData);
 
-
-        new Thread(p).start();
+        new Thread(phoneProducer).start();
+        new Thread (itemProcessor).start();
         Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
         Log.d("service", "service onstartcommand");
 
@@ -110,7 +115,10 @@ public class SensorService extends Service {
                     Log.i(TAG, "Runnable executing.");
                     //unregisterListener(); possibly reregister all threads
                     //registerListener();
-                    p.cleanThread();
+                    phoneProducer.cleanThread();
+                    //new Thread(p).start();
+                    // This might lead to creation of many threads and needs to be checked
+                    new Thread(phoneProducer).start();
 
                 }
             };
@@ -151,7 +159,9 @@ public class SensorService extends Service {
 
         // b.stopBluetooth();
         unregisterReceiver(mReceiver);
-        p.cleanThread();
+        phoneProducer.cleanThread();
+        itemProcessor.cancelExecution();
+
         mWakeLock.release();
         stopForeground(true);
 
