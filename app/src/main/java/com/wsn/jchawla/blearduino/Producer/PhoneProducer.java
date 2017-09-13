@@ -145,7 +145,7 @@ public class PhoneProducer implements SensorEventListener,Runnable {
 
     }
 
-    private Item getAccelerometer(SensorEvent event)  {
+    private void getAccelerometer(SensorEvent event)  {
 
         // Log.d("in thread", "getAccel");
 
@@ -197,7 +197,7 @@ public class PhoneProducer implements SensorEventListener,Runnable {
         // Log.d("in phone",formatted);
         return formatted;*/
 
-    return item;
+
     }
 
     @Override

@@ -156,7 +156,7 @@ public class SensorService extends Service {
         // b.stopBluetooth();
         unregisterReceiver(mReceiver);
         phoneProducer.stopProducing();
-
+        consumer.finishConsumption();
 
         mWakeLock.release();
         stopForeground(true);

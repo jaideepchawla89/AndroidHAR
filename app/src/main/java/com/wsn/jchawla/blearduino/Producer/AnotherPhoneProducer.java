@@ -21,76 +21,50 @@ import java.util.TimerTask;
  * Created by jchawla on 20.01.2017.
  */
 
-public class AnotherPhoneProducer implements Producer,SensorEventListener {
-
-    private SensorManager mSensorManager=null;
-    private Sensor accSensor=null;
-    private Sensor gyroSensor=null;
-    private Sensor magSensor=null;
-    // private LinkedBlockingQueue<String> buffer=new LinkedBlockingQueue<>();
-    private Context mContext;
-    Item item ;
-    private HandlerThread mSensorThread;
-    private Handler mSensorHandler;
-
-    public static File mLogFile = null;
-    public static FileOutputStream mFileStream = null;
-
-    private String pName;
-    private String activityname;
-
-
-    // angular speeds from gyro
-    private float[] gyro = new float[3];
-
-    // rotation matrix from gyro data
-    private float[] gyroMatrix = new float[9];
-
-    // orientation angles from gyro matrix
-    private float[] gyroOrientation = new float[3];
-
-    // magnetic field vector
-    private float[] magnet = new float[3];
-
-    // accelerometer vector
-    private float[] accel = new float[3];
-
-    // orientation angles from accel and magnet
-    private float[] accMagOrientation = new float[3];
-
-    // final orientation angles from sensor fusion
-    private float[] fusedOrientation = new float[3];
-
-    private float[] selectedOrientation = fusedOrientation;
-
-
-
-    public enum Mode {
-        ACC_MAG, GYRO, FUSION
-    }
-
-    // accelerometer and magnetometer based rotation matrix
-    private float[] rotationMatrix = new float[9];
+public class AnotherPhoneProducer implements Producer {
 
     public static final float EPSILON = 0.000000001f;
-    private static final float NS2S = 1.0f / 1000000000.0f;
-    private long timestamp;
-    private boolean initState = true;
-
     public static final int TIME_CONSTANT = 30;   //probably needs to be changed acc to sensor refresh rate
     public static final float FILTER_COEFFICIENT = 0.98f;
+    private static final float NS2S = 1.0f / 1000000000.0f;
+    public static File mLogFile = null;
+    public static FileOutputStream mFileStream = null;
+    Item item;
+    private SensorManager mSensorManager = null;
+    private SensorEventListener mListener;
+    private Sensor accSensor = null;
+    private Sensor gyroSensor = null;
+    private Sensor magSensor = null;
+    // private LinkedBlockingQueue<String> buffer=new LinkedBlockingQueue<>();
+    private Context mContext;
+    private HandlerThread mSensorThread;
+    private Handler mSensorHandler;
+    private String pName;
+    private String activityname;
+    // angular speeds from gyro
+    private float[] gyro = new float[3];
+    // rotation matrix from gyro data
+    private float[] gyroMatrix = new float[9];
+    // orientation angles from gyro matrix
+    private float[] gyroOrientation = new float[3];
+    // magnetic field vector
+    private float[] magnet = new float[3];
+    // accelerometer vector
+    private float[] accel = new float[3];
+    // orientation angles from accel and magnet
+    private float[] accMagOrientation = new float[3];
+    // final orientation angles from sensor fusion
+    private float[] fusedOrientation = new float[3];
+    private float[] selectedOrientation = fusedOrientation;
+    // accelerometer and magnetometer based rotation matrix
+    private float[] rotationMatrix = new float[9];
+    private long timestamp;
+    private boolean initState = true;
     private Timer fuseTimer = new Timer();
 
 
-
-
-
-
-
-
-    public AnotherPhoneProducer(Context context, String name, String aName)
-    {
-        mContext =context;
+    public AnotherPhoneProducer(Context context, String name, String aName) {
+        mContext = context;
         //this.buffer = buf;
 
         gyroOrientation[0] = 0.0f;
@@ -113,59 +87,91 @@ public class AnotherPhoneProducer implements Producer,SensorEventListener {
         // wait for one second until gyroscope and magnetometer/accelerometer
         // data is initialised then schedule the complementary filter task
         // fuseTimer.scheduleAtFixedRate(new calculateFusedOrientationTask(), 1000, TIME_CONSTANT);
-        pName=name;
-        activityname=aName;
+        pName = name;
+        activityname = aName;
         Log.d("service", mContext.toString());
-        mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
 
+        /*mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
         accSensor =mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         gyroSensor =mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        magSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        magSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);*/
 
 
     }
-
-
 
     @Override
     public Item startProducing() {
-        mSensorThread = new HandlerThread("Sensor thread", Thread.MAX_PRIORITY);
+        /*mSensorThread = new HandlerThread("Sensor thread", Thread.MAX_PRIORITY);
         mSensorThread.start();
-        mSensorHandler = new Handler(mSensorThread.getLooper()); //Blocks until looper is prepared,
+        mSensorHandler = new Handler(mSensorThread.getLooper()); //Blocks until looper is prepared,*/
 
 
-            mSensorManager.registerListener(this, accSensor, 200000, 200000);
+        Thread sensorRun = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
+                accSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+                gyroSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+                magSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
+                mSensorThread = new HandlerThread("Sensor thread", Thread.MAX_PRIORITY);
+                mSensorThread.start();
+                mSensorHandler = new Handler(mSensorThread.getLooper());
+
+                mListener = new SensorEventListener() {
+                    @Override
+                    public void onSensorChanged(SensorEvent event) {
+                        getAccelerometer(event);
+
+                    }
+
+                    @Override
+                    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+                    }
+                };
+
+                mSensorManager.registerListener(mListener, accSensor, SensorManager.SENSOR_DELAY_FASTEST,
+                        mSensorHandler);
+                mSensorManager.registerListener(mListener, gyroSensor, SensorManager.SENSOR_DELAY_FASTEST,
+                        mSensorHandler);
+                mSensorManager.registerListener(mListener, magSensor, SensorManager.SENSOR_DELAY_FASTEST,
+                        mSensorHandler);
+                fuseTimer.scheduleAtFixedRate(new AnotherPhoneProducer.calculateFusedOrientationTask(), 1000, TIME_CONSTANT);
+
+            }
+        });
+
+        sensorRun.start();
+
+
+          /*  mSensorManager.registerListener(this, accSensor, 200000, 200000);
             mSensorManager.registerListener(this, gyroSensor, 200000, 200000);
             mSensorManager.registerListener(this, magSensor, 200000, 200000);
-            fuseTimer.scheduleAtFixedRate(new AnotherPhoneProducer.calculateFusedOrientationTask(), 1000, TIME_CONSTANT);
+            fuseTimer.scheduleAtFixedRate(new AnotherPhoneProducer.calculateFusedOrientationTask(), 1000, TIME_CONSTANT);*/
 
 
-            // Log.d("in run()", "start()method");
-            return item;
+        Log.d("in startProducing()", item.toString());
+        return item;
+
 
     }
-
-
-
-
 
     @Override
     public void stopProducing() {
-        if(mSensorManager != null) {
-            mSensorManager.unregisterListener(this);
+        if (mSensorManager != null) {
+            mSensorManager.unregisterListener(mListener);
             Log.d("in thread", "cleanThread");
         }
-        mSensorThread.quitSafely();
         fuseTimer.cancel();
+        mSensorThread.quitSafely();
+
 
     }
 
-
-
-    private void getAccelerometer(SensorEvent event)  {
+    private void getAccelerometer(SensorEvent event) {
 
         // Log.d("in thread", "getAccel");
-
 
 
         switch (event.sensor.getType()) {
@@ -184,9 +190,9 @@ public class AnotherPhoneProducer implements Producer,SensorEventListener {
         }
 
         double azimuthValue = getAzimuth();
-        double rollValue =  getRoll();
-        double pitchValue =  getPitch();
-        item=new SensorReading(event.timestamp/1000,azimuthValue,rollValue,pitchValue,Double.valueOf(accel[0]),Double.valueOf(accel[1]),Double.valueOf(accel[2])) ;
+        double rollValue = getRoll();
+        double pitchValue = getPitch();
+        item = new SensorReading(event.timestamp / 1000, azimuthValue, rollValue, pitchValue, Double.valueOf(accel[0]), Double.valueOf(accel[1]), Double.valueOf(accel[2]));
 
 
         //  Log.d("azimuth",Double.toString(azimuthValue));
@@ -217,33 +223,6 @@ public class AnotherPhoneProducer implements Producer,SensorEventListener {
         //return item;
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // do nothing
-    }
-
-
-
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        // do nothing
-        getAccelerometer(event);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public double getAzimuth() {
         return selectedOrientation[0] * 180 / Math.PI;
     }
@@ -264,28 +243,30 @@ public class AnotherPhoneProducer implements Producer,SensorEventListener {
         System.arraycopy(sensorValues, 0, accel, 0, 3);
 
     }
-    public  void setMode(PhoneProducer.Mode mode) {
-        Log.i("tag", "msg 0"+ mode);
+
+    public void setMode(PhoneProducer.Mode mode) {
+        Log.i("tag", "msg 0" + mode);
         Log.i("tag", "msg 00000" + PhoneProducer.Mode.ACC_MAG);
         switch (mode) {
             case ACC_MAG:
-                Log.i("tag", "msg 1"+ mode);
+                Log.i("tag", "msg 1" + mode);
                 selectedOrientation = accMagOrientation;
                 break;
             case GYRO:
-                Log.i("tag", "msg 2"+ mode);
+                Log.i("tag", "msg 2" + mode);
                 selectedOrientation = gyroOrientation;
                 break;
             case FUSION:
-                Log.i("tag", "msg 3"+ mode);
+                Log.i("tag", "msg 3" + mode);
                 selectedOrientation = fusedOrientation;
                 break;
             default:
-                Log.i("tag", "msg 4"+ mode);
+                Log.i("tag", "msg 4" + mode);
                 selectedOrientation = fusedOrientation;
                 break;
         }
     }
+
     public void calculateAccMagOrientation() {
         if (SensorManager.getRotationMatrix(rotationMatrix, null, accel, magnet)) {
             SensorManager.getOrientation(rotationMatrix, accMagOrientation);
@@ -322,7 +303,6 @@ public class AnotherPhoneProducer implements Producer,SensorEventListener {
         deltaRotationVector[2] = sinThetaOverTwo * normValues[2];
         deltaRotationVector[3] = cosThetaOverTwo;
     }
-
 
     // This function performs the integration of the gyroscope data.
     // It writes the gyroscope based orientation into gyroOrientation.
@@ -433,6 +413,10 @@ public class AnotherPhoneProducer implements Producer,SensorEventListener {
         return result;
     }
 
+    public enum Mode {
+        ACC_MAG, GYRO, FUSION
+    }
+
     class calculateFusedOrientationTask extends TimerTask {
         public void run() {
             float oneMinusCoeff = 1.0f - FILTER_COEFFICIENT;
@@ -487,13 +471,6 @@ public class AnotherPhoneProducer implements Producer,SensorEventListener {
             //mainHandler.post(updateOreintationDisplayTask);
         }
     }
-
-
-
-
-
-
-
 
 
 }
